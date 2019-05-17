@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Hot Restaurant - Tables</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+
+		<div class="jumbotron">
+			<h1 class="text-center">Hot Restaurant</h1>
+			<hr>
+			<div class="text-center">
+				<a href="/"><button class="btn btn-lg btn-secondary">Home</button></a>
+				<a href="/reserve"><button class="btn btn-lg btn-primary">Make a Reservation</button></a>
+			</div>
+		</div>
+
+		<div class="card mb-2">
+			<div class="card-header">
+				<div class="text-center">
+					<h3>Current Reservations</h3>
+				</div>
+			</div>
+			<div class="card-body" id="reservationsDiv">
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">
+				<div class="text-center">
+					<h3>Waiting List</h3>
+				</div>
+			</div>
+			<div class="card-body" id="waitlistDiv">
+			</div>
+		</div>
+
+		<p>Control Panel</p>
+		<a href="/api/cleartables">Clear Tables </a>|<a href="/api/tables"> API Tables </a>|<a href="/api/waitlist"> API Waitlist</a>
+	</div>
+	<script>
+
+		const reservedTemplate = ({tableNumber,customerName,customerID,customerEmail,phoneNumber}) => { return `
+		<div class="card">
+			<div class="card-header">
+				<h4>Table ${tableNumber}</h4>
+			</div>
+			<div class="card-body">
+				<h5 class="card-title">Party for ${customerName}</h5>
+				<p class="card-text">Phone: ${phoneNumber}</p>
+				<p class="card-text">Email: ${customerEmail}</p>
+				<p class="card-text">ID: ${customerID}</p>
+			</div>
+		</div>
+		`}
+
+		fetch('/api/tables')
+		.then(response => {
+			return response.json();
+		})
+		.then(customers => {
+			for (let i = 0; i < 5; i++) {
+				customers[i].tableNumber = i+1
+			}
+			const reservations = document.getElementById('reservationsDiv')
+			reservations.innerHTML = customers.map(reservedTemplate).join('');
+		})
+
+		const waitlistTemplate = ({customerName,customerID,customerEmail,phoneNumber}) => { return `
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Party for ${customerName}</h5>
+				<p class="card-text">Phone: ${phoneNumber}</p>
+				<p class="card-text">Email: ${customerEmail}</p>
+				<p class="card-text">ID: ${customerID}</p>
+			</div>
+		</div>
+		`}
+
+		fetch('/api/waitlist')
+		.then(response => {
+			return response.json();
+		})
+		.then(customers => {
+			const waitlist = document.getElementById('waitlistDiv')
+			waitlist.innerHTML = customers.map(waitlistTemplate).join('');
+		})
+
+	</script>
+</body>
+</html>
