@@ -8,10 +8,10 @@ app.use(express.json());
 
 const tables = [
 	{
-		customerName: "Mohini Modi",
-		phoneNumber: "90909090",
-		customerEmail: "ohini@gmail.com",
-		customerID: "1"
+		customerName: "",
+		phoneNumber: "",
+		customerEmail: "",
+		customerID: ""
 	},
 	{
 		customerName: "",
